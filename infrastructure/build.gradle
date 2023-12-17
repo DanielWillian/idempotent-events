@@ -1,0 +1,15 @@
+plugins {
+    id 'io.freefair.lombok'
+    id 'io.quarkus'
+    id 'org.kordamp.gradle.jandex'
+}
+
+dependencies {
+    implementation project(":domain")
+    implementation "io.quarkus:quarkus-hibernate-orm"
+    implementation "io.quarkus:quarkus-jdbc-h2"
+}
+
+quarkusDependenciesBuild {
+    dependsOn 'jandex'
+}
