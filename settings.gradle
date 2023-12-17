@@ -7,6 +7,8 @@ pluginManagement {
     plugins {
         id "${quarkusPluginId}" version "${quarkusPluginVersion}"
         id 'java'
+        id 'io.freefair.lombok' version '8.4'
+        id 'org.kordamp.gradle.jandex' version '1.0.0'
     }
 }
 
