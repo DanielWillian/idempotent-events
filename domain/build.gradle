@@ -1,7 +1,9 @@
 plugins {
     id 'io.freefair.lombok'
+    id 'org.kordamp.gradle.jandex'
 }
 
 dependencies {
+    implementation "jakarta.enterprise:jakarta.enterprise.cdi-api"
     implementation "org.slf4j:slf4j-api"
 }
