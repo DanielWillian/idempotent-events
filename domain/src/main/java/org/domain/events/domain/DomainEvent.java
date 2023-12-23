@@ -10,9 +10,9 @@ import static org.domain.events.domain.util.IdGenerator.randomId;
 @Getter
 @EqualsAndHashCode
 public class DomainEvent {
-    private final String id;
+    private final EventId eventId;
 
     public DomainEvent() {
-        this.id = randomId();
+        this.eventId = EventId.of(randomId());
     }
 }
