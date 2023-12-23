@@ -5,7 +5,6 @@ import jakarta.inject.Singleton;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.domain.events.domain.EventPublisher;
 import org.domain.events.domain.Topic;
 import org.domain.events.domain.User;
@@ -16,7 +15,6 @@ import org.domain.events.domain.UserService;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Slf4j
 @Singleton
 public class UserServiceImpl implements UserService {
     @Inject
@@ -29,9 +27,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public User createUser(String name) {
-        log.info("Creating user with name: {}", name);
         User user = userFactory.createUser(name);
-        log.info("Creating user: {}", user);
         userRepository.saveUser(user);
 
         UserCreatedEvent userCreatedEvent = UserCreatedEvent.of(user);
