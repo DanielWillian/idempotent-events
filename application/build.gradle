@@ -8,4 +8,5 @@ dependencies {
     implementation "jakarta.enterprise:jakarta.enterprise.cdi-api"
     implementation "jakarta.transaction:jakarta.transaction-api"
     implementation "org.slf4j:slf4j-api"
+    implementation "io.quarkus:quarkus-jackson"
 }
