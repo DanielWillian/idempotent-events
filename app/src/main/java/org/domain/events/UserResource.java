@@ -15,10 +15,11 @@ public class UserResource {
     private UserService userService;
 
     @POST
+    @Path("/best-effort")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public UserPostResponse addUser(UserPostRequest request) {
-        User user = userService.createUser(request.getName());
+    public UserPostResponse addUserBestEffort(UserPostRequest request) {
+        User user = userService.createUserBestEffort(request.getName());
         return UserPostResponse.fromDomain(user);
     }
 }

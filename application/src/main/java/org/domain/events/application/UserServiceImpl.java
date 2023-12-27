@@ -18,15 +18,15 @@ import org.domain.events.domain.UserService;
 @Singleton
 public class UserServiceImpl implements UserService {
     @Inject
-    UserFactory userFactory;
+    private UserFactory userFactory;
     @Inject
-    UserRepository userRepository;
+    private UserRepository userRepository;
     @Inject
-    EventPublisher eventPublisher;
+    private EventPublisher eventPublisher;
 
     @Transactional
     @Override
-    public User createUser(String name) {
+    public User createUserBestEffort(String name) {
         User user = userFactory.createUser(name);
         userRepository.saveUser(user);
 
