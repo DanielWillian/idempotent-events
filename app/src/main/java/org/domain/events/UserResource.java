@@ -31,4 +31,13 @@ public class UserResource {
         User user = userService.createUserOutboxPoll(request.getName());
         return UserPostResponse.fromDomain(user);
     }
+
+    @POST
+    @Path("/outbox-immediate")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public UserPostResponse addUserOutboxImmediate(UserPostRequest request) {
+        User user = userService.createUserOutboxImmediate(request.getName()).getPayload();
+        return UserPostResponse.fromDomain(user);
+    }
 }
