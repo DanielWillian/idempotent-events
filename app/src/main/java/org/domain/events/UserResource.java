@@ -22,4 +22,13 @@ public class UserResource {
         User user = userService.createUserBestEffort(request.getName());
         return UserPostResponse.fromDomain(user);
     }
+
+    @POST
+    @Path("/outbox-poll")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public UserPostResponse addUserOutboxPoll(UserPostRequest request) {
+        User user = userService.createUserOutboxPoll(request.getName());
+        return UserPostResponse.fromDomain(user);
+    }
 }
