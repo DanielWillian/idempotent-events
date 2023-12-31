@@ -1,5 +1,8 @@
 # domain-events
 
+Demonstration of implementations of Domain Events. It presents a best-effort approach, and two approaches using an outbox pattern.
+Created along with my [Medium story](https://danielwilliansc.medium.com/exploring-domain-events-implementations-d389538e2385) about Domain Events.
+
 This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
 If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
