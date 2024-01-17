@@ -10,4 +10,5 @@ dependencies {
     implementation "io.quarkus:quarkus-jdbc-h2"
     implementation "io.quarkus:quarkus-scheduler"
     implementation "io.quarkus:quarkus-smallrye-reactive-messaging-kafka"
+    implementation "io.quarkus:quarkus-smallrye-fault-tolerance"
 }

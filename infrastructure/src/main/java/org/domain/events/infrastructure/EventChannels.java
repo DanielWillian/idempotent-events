@@ -1,8 +1,9 @@
 package org.domain.events.infrastructure;
 
+import io.quarkus.narayana.jta.QuarkusTransaction;
+import io.smallrye.common.annotation.Blocking;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.domain.events.application.message.EventMessage;
 import org.domain.events.application.message.EventMessageMappers;
@@ -12,6 +13,7 @@ import org.domain.events.domain.EventPublisher;
 import org.domain.events.domain.EventSubscriber;
 import org.domain.events.domain.LoggingListener;
 import org.domain.events.domain.Topic;
+import org.eclipse.microprofile.faulttolerance.Retry;
 import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
@@ -59,9 +61,12 @@ public class EventChannels implements EventSubscriber, EventPublisher {
     }
 
     @Incoming("user-created")
-    @Transactional
+    @Blocking
+    @Retry
     public void userCreated(EventMessage message) {
-        processEvent(Topic.USER_CREATED, message);
+        QuarkusTransaction.requiringNew().run(() -> processEvent(Topic.USER_CREATED, message));
+
+        if (Math.random() >= 0.5) throw new RuntimeException("Simulated error after transaction");
     }
 
     private void processEvent(Topic topic, EventMessage message) {
