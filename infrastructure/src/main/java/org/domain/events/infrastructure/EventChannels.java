@@ -1,13 +1,20 @@
 package org.domain.events.infrastructure;
 
+import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
+import org.domain.events.application.message.EventMessage;
+import org.domain.events.application.message.EventMessageMappers;
 import org.domain.events.domain.DomainEvent;
 import org.domain.events.domain.EventListener;
 import org.domain.events.domain.EventPublisher;
 import org.domain.events.domain.EventSubscriber;
 import org.domain.events.domain.LoggingListener;
 import org.domain.events.domain.Topic;
+import org.eclipse.microprofile.reactive.messaging.Channel;
+import org.eclipse.microprofile.reactive.messaging.Emitter;
+import org.eclipse.microprofile.reactive.messaging.Incoming;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -18,14 +25,19 @@ import java.util.Map;
 @Slf4j
 public class EventChannels implements EventSubscriber, EventPublisher {
     private final Map<Topic, List<EventListener<?>>> listeners;
+    private final Map<Topic, Emitter<EventMessage>> emitters;
 
-    public EventChannels() {
-        listeners = new EnumMap<>(Topic.class);
-        addListener(Topic.USER_CREATED, new LoggingListener());
+    @Inject
+    public EventChannels(LoggingListener loggingListener,
+                         @Channel("user-created") Emitter<EventMessage> userCreatedEmitter) {
+        this(Map.of(Topic.USER_CREATED, List.of(loggingListener)),
+                Map.of(Topic.USER_CREATED, userCreatedEmitter));
     }
 
-    public EventChannels(Map<Topic, List<EventListener<?>>> listeners) {
+    public EventChannels(Map<Topic, List<EventListener<?>>> listeners,
+                         Map<Topic, Emitter<EventMessage>> emitters) {
         this.listeners = new EnumMap<>(listeners);
+        this.emitters = new EnumMap<>(emitters);
     }
 
     @Override
@@ -37,9 +49,25 @@ public class EventChannels implements EventSubscriber, EventPublisher {
     @Override
     public void publish(Topic topic, DomainEvent event) {
         if (!listeners.containsKey(topic)) return;
+        if (!emitters.containsKey(topic)) return;
 
-        log.info("Publishing event: {}", event);
+        EventMessage eventMessage = EventMessageMappers.fromDomain(event);
 
+        log.info("Publishing message: {}", eventMessage);
+
+        emitters.get(topic).send(eventMessage);
+    }
+
+    @Incoming("user-created")
+    @Transactional
+    public void userCreated(EventMessage message) {
+        processEvent(Topic.USER_CREATED, message);
+    }
+
+    private void processEvent(Topic topic, EventMessage message) {
+        log.info("Consuming message: {}", message);
+
+        DomainEvent event = EventMessageMappers.toDomain(message);
         for (EventListener<?> listener : listeners.get(topic)) {
             listener.processEvent(event);
         }

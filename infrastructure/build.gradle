@@ -5,7 +5,9 @@ plugins {
 
 dependencies {
     implementation project(":domain")
+    implementation project(":application")
     implementation "io.quarkus:quarkus-hibernate-orm"
     implementation "io.quarkus:quarkus-jdbc-h2"
     implementation "io.quarkus:quarkus-scheduler"
+    implementation "io.quarkus:quarkus-smallrye-reactive-messaging-kafka"
 }
