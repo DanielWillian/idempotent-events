@@ -12,7 +12,7 @@ pluginManagement {
     }
 }
 
-rootProject.name='domain-events'
+rootProject.name='idempotent-events'
 
 include 'app'
 include 'application'

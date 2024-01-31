@@ -10,11 +10,11 @@
 #
 # Then, build the image with:
 #
-# docker build -f src/main/docker/Dockerfile.native-micro -t quarkus/domain-events .
+# docker build -f src/main/docker/Dockerfile.native-micro -t quarkus/idempotent-events .
 #
 # Then run the container using:
 #
-# docker run -i --rm -p 8080:8080 quarkus/domain-events
+# docker run -i --rm -p 8080:8080 quarkus/idempotent-events
 #
 ###
 FROM quay.io/quarkus/quarkus-micro-image:2.0
